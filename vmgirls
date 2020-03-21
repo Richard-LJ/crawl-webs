@@ -1,0 +1,31 @@
+import re
+import requests
+import time
+import os
+
+headers = {
+			"user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.70 Safari/537.36",
+			"cookie": "_uab_collina=157258226625083933457665; thw=cn; t=36d1cd24cf0143fb6accdf025534d197; enc=97GhrHhKkErSIlgzQuOf4gDv8yB1IDMrzS%2FqNp8OhQXosfA5%2Bpm6Vj4%2B%2FjCYIIsIglI%2FeakHaMTRg2bsOCGe%2Fg%3D%3D; hng=CN%7Czh-CN%7CCNY%7C156; cookie2=130c64bc2ccdc80f7d3858f7c4143707; _tb_token_=ede063be6e3ee; XSRF-TOKEN=a5e7e17c-f1d8-4ece-8f63-20dd0adc170c; mt=ci=0_0; cna=PpdBFupPaykCAbdAPqcqw59D; isg=BFlZdWsdY9ah6DznWNPShWvxaEwz5k2YGu7yC3sO5wD_gngUwTA4a72QgAZROuXQ; l=cBLufjhqqvUwqS6yBOCZhurza7799IRAguPzaNbMi_5CU6L65G7Oovk9xFp6cjWdOrYp4-ERe5p9-eteiNF7dhspXUJ1."
+			}
+
+lists = [x for x in input().split(',')]
+for i in lists:
+    response = requests.get(i, headers = headers)
+    html = response.text
+
+    urls = re.findall('<a href="(.*?)" alt=".*?" title=".*?">', html)
+
+    dir = './妹纸图'
+    if not os.path.exists(dir):
+        os.makedirs(dir)
+    count = 1
+
+    for url in urls:
+        print('正在下载第{}张图片...'.format(str(count)))
+        file_name = dir+ '/' + str(count) + url.split('/')[-1]
+        response = requests.get(url, headers = headers)
+        with open(file_name, 'wb') as f:
+            f.write(response.content)
+        time.sleep(1)
+        count += 1
+        
