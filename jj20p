@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 import os
 import time
 
-def getHtmlText(url):
+def getHtmlText(url, headers):
     try:
         r = requests.get(url, timeout=30, headers=headers)
         r.raise_for_status()
@@ -45,7 +45,7 @@ def main():
     }
     for i in range(1, int(x) + 1):
         url = 'http://www.jj20.com/bz/nxxz/list_7_'+str(i)+'.html'#各个主页
-        html = getHtmlText(url)
+        html = getHtmlText(url, headers)
         print('>>>'+ url)
 
         urls = Findperson(html)
@@ -64,7 +64,7 @@ def main():
                 print(url)
 
                 try:
-                    html = getHtmlText(url)
+                    html = getHtmlText(url, headers)
                     parseHtml(imgs, html)
                 except:
                     continue
